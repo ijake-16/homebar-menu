@@ -89,8 +89,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/drinks/add" element={<AddDrinkPage />} />
-        <Route path="/admin/drinks/:id" element={<DrinkDetailsPage />} />
+        <Route path="/admin/add" element={<AddDrinkPage />} />
+        <Route path="/drinks/:id" element={<DrinkDetailsPage />} />
       </Routes>
     </Router>
   );
