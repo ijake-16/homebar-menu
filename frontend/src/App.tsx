@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Frame from './components/frame';
 import Navigator from './components/navigator';
+import AdminPage from './pages/AdminPage';
+import DrinkDetailsPage from './pages/DrinkDetailsPage';
+import AddDrinkPage from './pages/AddDrinkPage';
 
 interface Drink {
   id: string;
@@ -9,7 +13,7 @@ interface Drink {
   baseLiquor: string;
 }
 
-function App() {
+function HomePage() {
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const sectionRefs = useRef<{[key: string]: HTMLDivElement | null}>({});
@@ -54,9 +58,7 @@ function App() {
   };
 
   return (
-    <div 
-      className="min-h-screen w-full bg-gradient-to-b from-stone-700 to-stone-900"
-    >
+    <div className="min-h-screen w-full bg-gradient-to-b from-stone-700 to-stone-900">
       <h1 className="text-3xl font-bold py-6 text-center text-white">
         <span className="mr-2">🍸</span> Home Bar Menu
       </h1>
@@ -78,6 +80,19 @@ function App() {
         ))}
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/drinks/add" element={<AddDrinkPage />} />
+        <Route path="/admin/drinks/:id" element={<DrinkDetailsPage />} />
+      </Routes>
+    </Router>
   );
 }
 

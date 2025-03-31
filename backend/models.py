@@ -16,6 +16,7 @@ class Drink(BaseModel):
     ingredients: List[Ingredient]
     ice: str
     shake_or_stir: str
+    available: bool = True
     instructions: Optional[List[str]] = []
     tags: Optional[List[str]] = []
     image_url: Optional[str] = ""
