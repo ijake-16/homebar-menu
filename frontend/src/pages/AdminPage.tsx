@@ -69,7 +69,7 @@ function AdminPage() {
               Current Drinks
             </h2>
             <button 
-              onClick={() => navigate('/admin/drinks/add')}
+              onClick={() => navigate('/admin/add')}
               className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg 
                          transition-colors duration-150 text-sm font-medium flex items-center"
             >
@@ -125,10 +125,10 @@ function AdminPage() {
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap text-xs w-32">
                         <Link 
-                          to={`/admin/drinks/${drink.id}`}
+                          to={`/admin/edit/${drink.id}`}
                           className="text-blue-400 hover:text-blue-300 transition-colors duration-150 mr-3 px-2 py-1 rounded-md bg-blue-400/10 hover:bg-blue-400/20"
                         >
-                          View
+                          Edit
                         </Link>
                         <button 
                           className="text-red-400 hover:text-red-300 transition-colors duration-150 px-2 py-1 rounded-md bg-red-400/10 hover:bg-red-400/20"
