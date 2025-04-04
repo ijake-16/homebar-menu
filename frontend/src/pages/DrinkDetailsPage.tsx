@@ -8,7 +8,8 @@ interface Ingredient {
 
 interface Drink {
   id: string;
-  name: string;
+  name?: string;
+  koreanName: string;
   abv: number;
   baseLiquor: string;
   glass: string;
@@ -52,7 +53,8 @@ function DrinkDetailsPage() {
           shakeOrStir: data.shake_or_stir,  // Map shake_or_stir → shakeOrStir
           instructions: data.instructions || [],
           tags: data.tags || [],
-          imageUrl: data.image_url || ""  // Map image_url → imageUrl
+          imageUrl: data.image_url || "",  // Map image_url → imageUrl
+          koreanName: data.korean_name,
         });
         setLoading(false);
       })
@@ -97,7 +99,16 @@ function DrinkDetailsPage() {
         ) : drink ? (
           <div className="bg-stone-800/50 backdrop-blur-sm rounded-xl shadow-xl p-8 text-white max-w-3xl mx-auto">
             <div className="flex justify-between items-start mb-6">
-              <h1 className="text-3xl font-bold">{drink.name}</h1>
+              <div>
+                {drink.name ? (
+                  <>
+                    <h1 className="text-3xl font-bold">{drink.name}</h1>
+                    <h2 className="text-xl font-medium text-stone-400 mt-1 font-korean">{drink.koreanName}</h2>
+                  </>
+                ) : (
+                  <h1 className="text-3xl font-bold font-korean">{drink.koreanName}</h1>
+                )}
+              </div>
             </div>
 
             {/* Basic Info */}
@@ -119,7 +130,7 @@ function DrinkDetailsPage() {
             {/* Description */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-3 border-b border-stone-600 pb-2">Description</h2>
-              <p className="text-stone-300 font-serif">{drink.description}</p>
+              <p className="text-stone-300 font-korean">{drink.description}</p>
             </div>
 
             {/* Toggle Button */}

@@ -11,6 +11,7 @@ import backgroundImage from './assets/background_main.png';
 interface Drink {
   id: string;
   name: string;
+  koreanName: string;
   abv: string;
   baseLiquor: string;
 }
@@ -56,9 +57,10 @@ function HomePage() {
       .then(res => res.json())
       .then(data => {
         // Transform the data
-        const transformedData = data.map(drink => ({
+        const transformedData = data.map((drink: any) => ({
           id: drink.id,
           name: drink.name,
+          koreanName: drink.korean_name,
           abv: drink.abv,
           baseLiquor: drink.base // Map base to baseLiquor
         }));
@@ -67,57 +69,57 @@ function HomePage() {
       .catch(() => {
         // fallback for now
         setDrinks([
-          { id: '1', name: 'Margarita', abv: '13%', baseLiquor: 'Tequila' },
-          { id: '2', name: 'Negroni', abv: '24%', baseLiquor: 'Gin' },
-          { id: '3', name: 'Mojito', abv: '12%', baseLiquor: 'Rum' },
-          { id: '4', name: 'Old Fashioned', abv: '32%', baseLiquor: 'Whiskey' },
-          { id: '5', name: 'Moscow Mule', abv: '10%', baseLiquor: 'Vodka' },
-          { id: '6', name: 'Whiskey Sour', abv: '20%', baseLiquor: 'Whiskey' },
-          { id: '7', name: 'Daiquiri', abv: '15%', baseLiquor: 'Rum' },
-          { id: '8', name: 'Gin & Tonic', abv: '12%', baseLiquor: 'Gin' },
+          { id: '1', name: 'Margarita', koreanName: '마가리타', abv: '13%', baseLiquor: 'Tequila' },
+          { id: '2', name: 'Negroni', koreanName: '네그로니', abv: '24%', baseLiquor: 'Gin' },
+          { id: '3', name: 'Mojito', koreanName: '모히토', abv: '12%', baseLiquor: 'Rum' },
+          { id: '4', name: 'Old Fashioned', koreanName: '올드 포데드', abv: '32%', baseLiquor: 'Whiskey' },
+          { id: '5', name: 'Moscow Mule', koreanName: '모스코 물', abv: '10%', baseLiquor: 'Vodka' },
+          { id: '6', name: 'Whiskey Sour', koreanName: '위스키 소어', abv: '20%', baseLiquor: 'Whiskey' },
+          { id: '7', name: 'Daiquiri', koreanName: '대이키리', abv: '15%', baseLiquor: 'Rum' },
+          { id: '8', name: 'Gin & Tonic', koreanName: '진 앤 토닉', abv: '12%', baseLiquor: 'Gin' },
           // Additional drinks
-          { id: '9', name: 'Paloma', abv: '12%', baseLiquor: 'Tequila' },
-          { id: '10', name: 'Ranch Water', abv: '10%', baseLiquor: 'Tequila' },
-          { id: '11', name: 'Tequila Sunrise', abv: '11%', baseLiquor: 'Tequila' },
-          { id: '12', name: 'Tommys Margarita', abv: '13%', baseLiquor: 'Tequila' },
-          { id: '13', name: 'El Diablo', abv: '12%', baseLiquor: 'Tequila' },
+          { id: '9', name: 'Paloma', koreanName: '팔로마', abv: '12%', baseLiquor: 'Tequila' },
+          { id: '10', name: 'Ranch Water', koreanName: '랜지 워터', abv: '10%', baseLiquor: 'Tequila' },
+          { id: '11', name: 'Tequila Sunrise', koreanName: '테키라 산리오', abv: '11%', baseLiquor: 'Tequila' },
+          { id: '12', name: 'Tommys Margarita', koreanName: '톰미의 마가리타', abv: '13%', baseLiquor: 'Tequila' },
+          { id: '13', name: 'El Diablo', koreanName: '엘 디아보로', abv: '12%', baseLiquor: 'Tequila' },
           
-          { id: '14', name: 'Martini', abv: '28%', baseLiquor: 'Gin' },
-          { id: '15', name: 'Aviation', abv: '21%', baseLiquor: 'Gin' },
-          { id: '16', name: 'Last Word', abv: '23%', baseLiquor: 'Gin' },
-          { id: '17', name: 'Gimlet', abv: '20%', baseLiquor: 'Gin' },
-          { id: '18', name: 'Corpse Reviver #2', abv: '22%', baseLiquor: 'Gin' },
+          { id: '14', name: 'Martini', koreanName: '마티니', abv: '28%', baseLiquor: 'Gin' },
+          { id: '15', name: 'Aviation', koreanName: '에이비전', abv: '21%', baseLiquor: 'Gin' },
+          { id: '16', name: 'Last Word', koreanName: '라스트 워드', abv: '23%', baseLiquor: 'Gin' },
+          { id: '17', name: 'Gimlet', koreanName: '지믈트', abv: '20%', baseLiquor: 'Gin' },
+          { id: '18', name: 'Corpse Reviver #2', koreanName: '코프스 리버 #2', abv: '22%', baseLiquor: 'Gin' },
           
-          { id: '19', name: 'Dark & Stormy', abv: '11%', baseLiquor: 'Rum' },
-          { id: '20', name: 'Piña Colada', abv: '13%', baseLiquor: 'Rum' },
-          { id: '21', name: 'Mai Tai', abv: '14%', baseLiquor: 'Rum' },
-          { id: '22', name: 'Hurricane', abv: '15%', baseLiquor: 'Rum' },
-          { id: '23', name: 'Jungle Bird', abv: '13%', baseLiquor: 'Rum' },
+          { id: '19', name: 'Dark & Stormy', koreanName: '다크 앤 스톰리', abv: '11%', baseLiquor: 'Rum' },
+          { id: '20', name: 'Piña Colada', koreanName: '피나 콜라다', abv: '13%', baseLiquor: 'Rum' },
+          { id: '21', name: 'Mai Tai', koreanName: '마이 타이', abv: '14%', baseLiquor: 'Rum' },
+          { id: '22', name: 'Hurricane', koreanName: '허리켄', abv: '15%', baseLiquor: 'Rum' },
+          { id: '23', name: 'Jungle Bird', koreanName: '정글 버드', abv: '13%', baseLiquor: 'Rum' },
           
-          { id: '24', name: 'Manhattan', abv: '30%', baseLiquor: 'Whiskey' },
-          { id: '25', name: 'Boulevardier', abv: '28%', baseLiquor: 'Whiskey' },
-          { id: '26', name: 'Paper Plane', abv: '25%', baseLiquor: 'Whiskey' },
-          { id: '27', name: 'Penicillin', abv: '23%', baseLiquor: 'Whiskey' },
-          { id: '28', name: 'Gold Rush', abv: '25%', baseLiquor: 'Whiskey' },
+          { id: '24', name: 'Manhattan', koreanName: '맨해튼', abv: '30%', baseLiquor: 'Whiskey' },
+          { id: '25', name: 'Boulevardier', koreanName: '부로빌리어', abv: '28%', baseLiquor: 'Whiskey' },
+          { id: '26', name: 'Paper Plane', koreanName: '페이퍼 플레인', abv: '25%', baseLiquor: 'Whiskey' },
+          { id: '27', name: 'Penicillin', koreanName: '페니실린', abv: '23%', baseLiquor: 'Whiskey' },
+          { id: '28', name: 'Gold Rush', koreanName: '골드 러시', abv: '25%', baseLiquor: 'Whiskey' },
           
-          { id: '29', name: 'Espresso Martini', abv: '18%', baseLiquor: 'Vodka' },
-          { id: '30', name: 'Cosmopolitan', abv: '20%', baseLiquor: 'Vodka' },
-          { id: '31', name: 'Black Russian', abv: '25%', baseLiquor: 'Vodka' },
-          { id: '32', name: 'White Russian', abv: '20%', baseLiquor: 'Vodka' },
-          { id: '33', name: 'Vodka Gimlet', abv: '16%', baseLiquor: 'Vodka' },
+          { id: '29', name: 'Espresso Martini', koreanName: '에스프레소 마티니', abv: '18%', baseLiquor: 'Vodka' },
+          { id: '30', name: 'Cosmopolitan', koreanName: '코스모폴리탄', abv: '20%', baseLiquor: 'Vodka' },
+          { id: '31', name: 'Black Russian', koreanName: '블랙 러시안', abv: '25%', baseLiquor: 'Vodka' },
+          { id: '32', name: 'White Russian', koreanName: '화이트 러시안', abv: '20%', baseLiquor: 'Vodka' },
+          { id: '33', name: 'Vodka Gimlet', koreanName: '보드카 지믈트', abv: '16%', baseLiquor: 'Vodka' },
           
           // Adding some drinks with other base spirits for variety
-          { id: '34', name: 'Sidecar', abv: '25%', baseLiquor: 'Cognac' },
-          { id: '35', name: 'Vieux Carré', abv: '29%', baseLiquor: 'Cognac' },
-          { id: '36', name: 'French 75', abv: '15%', baseLiquor: 'Cognac' },
+          { id: '34', name: 'Sidecar', koreanName: '사이드카', abv: '25%', baseLiquor: 'Cognac' },
+          { id: '35', name: 'Vieux Carré', koreanName: '비우 카레', abv: '29%', baseLiquor: 'Cognac' },
+          { id: '36', name: 'French 75', koreanName: '프랑스 75', abv: '15%', baseLiquor: 'Cognac' },
           
-          { id: '37', name: 'Aperol Spritz', abv: '11%', baseLiquor: 'Aperitif' },
-          { id: '38', name: 'Campari Spritz', abv: '11%', baseLiquor: 'Aperitif' },
+          { id: '37', name: 'Aperol Spritz', koreanName: '에펠로 스프리츠', abv: '11%', baseLiquor: 'Aperitif' },
+          { id: '38', name: 'Campari Spritz', koreanName: '캄파리 스프리츠', abv: '11%', baseLiquor: 'Aperitif' },
           
           // Adding some Mezcal cocktails
-          { id: '39', name: 'Mezcal Negroni', abv: '24%', baseLiquor: 'Mezcal' },
-          { id: '40', name: 'Mezcal Mule', abv: '12%', baseLiquor: 'Mezcal' },
-          { id: '41', name: 'Naked & Famous', abv: '22%', baseLiquor: 'Mezcal' }
+          { id: '39', name: 'Mezcal Negroni', koreanName: '메즐 네그로니', abv: '24%', baseLiquor: 'Mezcal' },
+          { id: '40', name: 'Mezcal Mule', koreanName: '메즐 물', abv: '12%', baseLiquor: 'Mezcal' },
+          { id: '41', name: 'Naked & Famous', koreanName: '네이크드 앤 포네임', abv: '22%', baseLiquor: 'Mezcal' }
         ]);
       });
   }, []);
@@ -222,7 +224,7 @@ function HomePage() {
                 ref={(el) => setRef(el, category)} 
                 className="mb-12"
               >
-                <h3 className="text-2xl font-quintessential text-white px-8 md:px-16 lg:px-32 mb-4">
+                <h3 className="text-2xl font-korean text-white px-8 md:px-16 lg:px-32 mb-4">
                   {category}
                 </h3>
                 <Frame drinks={drinks.filter(drink => drink.baseLiquor === category)} />

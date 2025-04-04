@@ -143,7 +143,7 @@ function AdminPage() {
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap font-medium w-72">
                         <div>
-                          <div>{drink.koreanName}</div>
+                          <div className="font-korean">{drink.koreanName}</div>
                           {drink.name && <div className="text-sm text-stone-400">{drink.name}</div>}
                         </div>
                       </td>

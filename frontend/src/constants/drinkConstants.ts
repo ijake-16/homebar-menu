@@ -20,9 +20,11 @@ export const COMMON_INGREDIENTS: Record<string, IngredientOption[]> = {
   Liqueurs: [
     { item: 'Campari', defaultAmount: '1 oz' },
     { item: 'Sweet Vermouth', defaultAmount: '1 oz' },
-    { item: 'Dry Vermouth', defaultAmount: '0.5 oz' },
-    { item: 'Triple Sec', defaultAmount: '0.75 oz' },
+    { item: 'Dry Vermouth', defaultAmount: '1/2 oz' },
+    { item: 'Triple Sec', defaultAmount: '1/2 oz' },
     { item: 'Coffee Liqueur', defaultAmount: '1 oz' },
+    { item: 'Amaretto', defaultAmount: '1 oz' },
+    { item: 'Peach Schnapps', defaultAmount: '1 oz' },
   ],
   Mixers: [
     { item: 'Lime Juice', defaultAmount: '0.75 oz' },

@@ -11,6 +11,7 @@ export default {
       fontFamily: {
         'sans': ['Charm', 'cursive'],
         'quintessential': ['Quintessential', 'cursive'],
+        'korean': ['Diphylleia', 'serif'],
       },
       animation: {
         'spin-slow': 'spin 20s linear infinite',

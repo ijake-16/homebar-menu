@@ -221,14 +221,14 @@ function AddDrinkPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Korean Name</label>
+                <label className="block text-sm font-medium mb-2">Korean Name <span className="text-red-400">*</span></label>
                 <input
                   type="text"
                   name="koreanName"
                   value={formData.koreanName}
                   onChange={handleChange}
                   className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
-                           text-white focus:outline-none focus:border-stone-500"
+                           text-white focus:outline-none focus:border-stone-500 font-korean"
                   required
                 />
               </div>

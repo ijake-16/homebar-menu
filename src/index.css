@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.korean-text {
+  font-family: 'Diphylleia', serif;
+}
+
+/* Add this to ensure text rendering is optimal for CJK fonts */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ensure proper Korean font support */
+:lang(ko) {
+  font-family: 'Diphylleia', serif;
+} 
