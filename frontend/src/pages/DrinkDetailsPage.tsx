@@ -30,40 +30,61 @@ function DrinkDetailsPage() {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    // For debugging: use sample data instead of API call
-    setDrink({
-      id: '0',
-      name: 'Negroni',
-      abv: 24,
-      baseLiquor: 'Gin',
-      glass: 'Old-Fashioned',
-      description: 'A classic Italian cocktail known for its perfect balance of bitter and sweet.',
-      ingredients: [
-        { item: 'Gin', amount: '1 oz' },
-        { item: 'Campari', amount: '1 oz' },
-        { item: 'Sweet Vermouth', amount: '1 oz' },
-        { item: 'Orange Peel', amount: '1 piece' },
-      ],
-      ice: 'Large Cube',
-      shakeOrStir: 'Stir',
-      instructions: [
-        'Add gin, Campari, and sweet vermouth to a mixing glass',
-        'Fill with ice and stir until well-chilled',
-        'Strain into a rocks glass over a large ice cube',
-        'Garnish with an orange peel',
-      ],
-      tags: ['Classic', 'Italian', 'Bitter', 'Aperitif'],
-      imageUrl: 'https://example.com/negroni.jpg'
-    });
-    setLoading(false);
+    if (!id) return;
+    
+    setLoading(true);
+    fetch(`http://localhost:8000/menu/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Drink not found');
+        return res.json();
+      })
+      .then(data => {
+        // Transform backend data to frontend format
+        setDrink({
+          id: data.id,
+          name: data.name,
+          abv: data.abv,
+          description: data.description,
+          baseLiquor: data.base,  // Map base → baseLiquor
+          glass: data.glass,
+          ingredients: data.ingredients,
+          ice: data.ice,
+          shakeOrStir: data.shake_or_stir,  // Map shake_or_stir → shakeOrStir
+          instructions: data.instructions || [],
+          tags: data.tags || [],
+          imageUrl: data.image_url || ""  // Map image_url → imageUrl
+        });
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching drink:', err);
+        setError('Failed to load drink details.');
+        setLoading(false);
+      });
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!id || !window.confirm('Are you sure you want to delete this drink?')) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/menu/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) throw new Error('Failed to delete drink');
+      navigate('/admin');
+    } catch (err) {
+      console.error('Error deleting drink:', err);
+      setError('Failed to delete drink. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-stone-700 to-stone-900 font-sans">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6 flex items-center">
-          <Link to="/admin" className="text-white hover:text-stone-300">
-            &larr; Back to Admin
+          <Link to="/" className="text-white hover:text-stone-300">
+            &larr; Back to Menu
           </Link>
         </div>
 
@@ -77,13 +98,6 @@ function DrinkDetailsPage() {
           <div className="bg-stone-800/50 backdrop-blur-sm rounded-xl shadow-xl p-8 text-white max-w-3xl mx-auto">
             <div className="flex justify-between items-start mb-6">
               <h1 className="text-3xl font-bold">{drink.name}</h1>
-              <button
-                onClick={() => navigate(`/admin/drinks/${drink.id}/edit`)}
-                className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg 
-                         transition-colors duration-150 text-sm"
-              >
-                Edit Drink
-              </button>
             </div>
 
             {/* Basic Info */}

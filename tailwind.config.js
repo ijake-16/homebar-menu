@@ -3,6 +3,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'fancy': ['"Playfair Display"', 'serif'],
+        'korean': ['Diphylleia', 'serif'],
       },
     },
   },

@@ -10,13 +10,15 @@ def doc_to_drink(doc):
 async def get_all_drinks():
     if menu_collection is None:
         raise ValueError("Database connection not available")
-    # Hard-coded limit of 100 drinks
     drinks = await menu_collection.find().to_list(100)
-    return [doc_to_drink(d) for d in drinks]
+    # Convert ObjectId to string for JSON serialization
+    for drink in drinks:
+        drink["id"] = str(drink.pop("_id"))
+    return drinks
 
 async def add_drink(drink: Drink):
     result = await menu_collection.insert_one(drink.dict())
-    return str(result.inserted_id)
+    return result.inserted_id
 
 async def delete_drink(drink_id: str):
     # No validation that drink_id is a valid ObjectId format
@@ -27,3 +29,14 @@ async def update_drink(drink_id: str, drink: Drink):
         {"_id": ObjectId(drink_id)},
         {"$set": drink.dict()}
     )
+
+async def get_drink_by_id(drink_id: str):
+    try:
+        drink = await menu_collection.find_one({"_id": ObjectId(drink_id)})
+        if drink:
+            drink["id"] = str(drink.pop("_id"))
+            return drink
+        return None
+    except Exception as e:
+        print(f"Error fetching drink: {e}")
+        return None

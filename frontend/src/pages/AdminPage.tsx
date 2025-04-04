@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 interface Drink {
   id: string;
-  name: string;
+  name?: string;
+  koreanName: string;
   abv: string;
   baseLiquor: string;
 }
@@ -20,7 +21,15 @@ function AdminPage() {
     fetch('http://localhost:8000/menu')
       .then(res => res.json())
       .then(data => {
-        setDrinks(data);
+        // Transform the data
+        const transformedData = data.map(drink => ({
+          id: drink.id,
+          name: drink.name,
+          koreanName: drink.korean_name,
+          abv: drink.abv,
+          baseLiquor: drink.base
+        }));
+        setDrinks(transformedData);
         setLoading(false);
       })
       .catch(err => {
@@ -28,18 +37,36 @@ function AdminPage() {
         setError('Failed to load drinks. Using fallback data.');
         // Fallback data
         setDrinks([
-          { id: '1', name: 'Margarita', abv: '13%', baseLiquor: 'Tequila' },
-          { id: '2', name: 'Negroni', abv: '24%', baseLiquor: 'Gin' },
-          { id: '3', name: 'Mojito', abv: '12%', baseLiquor: 'Rum' },
-          { id: '4', name: 'Old Fashioned', abv: '32%', baseLiquor: 'Whiskey' },
-          { id: '5', name: 'Moscow Mule', abv: '10%', baseLiquor: 'Vodka' },
-          { id: '6', name: 'Whiskey Sour', abv: '20%', baseLiquor: 'Whiskey' },
-          { id: '7', name: 'Daiquiri', abv: '15%', baseLiquor: 'Rum' },
-          { id: '8', name: 'Gin & Tonic', abv: '12%', baseLiquor: 'Gin' },
+          { id: '1', name: 'Margarita', koreanName: '마가리타', abv: '13%', baseLiquor: 'Tequila' },
+          { id: '2', name: 'Negroni', koreanName: '네그로니', abv: '24%', baseLiquor: 'Gin' },
+          { id: '3', name: 'Mojito', koreanName: '모히토', abv: '12%', baseLiquor: 'Rum' },
+          { id: '4', name: 'Old Fashioned', koreanName: '올드 포셔드', abv: '32%', baseLiquor: 'Whiskey' },
+          { id: '5', name: 'Moscow Mule', koreanName: '모스코 뮬', abv: '10%', baseLiquor: 'Vodka' },
+          { id: '6', name: 'Whiskey Sour', koreanName: '위스키 소어', abv: '20%', baseLiquor: 'Whiskey' },
+          { id: '7', name: 'Daiquiri', koreanName: '대이키리', abv: '15%', baseLiquor: 'Rum' },
+          { id: '8', name: 'Gin & Tonic', koreanName: '진 앤 토닉', abv: '12%', baseLiquor: 'Gin' },
         ]);
         setLoading(false);
       });
   }, []);
+
+  const handleDelete = async (drinkId: string) => {
+    if (!window.confirm('Are you sure you want to delete this drink?')) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/menu/${drinkId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete drink');
+      
+      // Remove the deleted drink from the state
+      setDrinks(drinks.filter(drink => drink.id !== drinkId));
+    } catch (err) {
+      console.error('Error deleting drink:', err);
+      setError('Failed to delete drink. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-stone-700 to-stone-900 font-mono">
@@ -115,7 +142,10 @@ function AdminPage() {
                         {drink.id}
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap font-medium w-72">
-                        {drink.name}
+                        <div>
+                          <div>{drink.koreanName}</div>
+                          {drink.name && <div className="text-sm text-stone-400">{drink.name}</div>}
+                        </div>
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap text-stone-300 w-48">
                         {drink.baseLiquor}
@@ -131,6 +161,7 @@ function AdminPage() {
                           Edit
                         </Link>
                         <button 
+                          onClick={() => handleDelete(drink.id)}
                           className="text-red-400 hover:text-red-300 transition-colors duration-150 px-2 py-1 rounded-md bg-red-400/10 hover:bg-red-400/20"
                         >
                           Delete

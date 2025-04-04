@@ -15,6 +15,7 @@ interface Ingredient {
 
 interface DrinkFormData {
   name: string;
+  koreanName: string;
   abv: number;
   baseLiquor: string;
   glass: string;
@@ -31,6 +32,7 @@ function AddDrinkPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<DrinkFormData>({
     name: '',
+    koreanName: '',
     abv: 0,
     baseLiquor: BASE_LIQUORS[0],
     glass: GLASS_TYPES[0],
@@ -142,15 +144,40 @@ function AddDrinkPage() {
     setError(null);
 
     try {
+      // Transform the data to match the backend model
+      const backendData = {
+        name: formData.name || null,
+        korean_name: formData.koreanName,
+        abv: formData.abv,
+        description: formData.description,
+        base: formData.baseLiquor,
+        glass: formData.glass,
+        ingredients: formData.ingredients,
+        ice: formData.ice,
+        shake_or_stir: formData.shakeOrStir,
+        instructions: formData.instructions,
+        tags: formData.tags,
+        image_url: formData.imageUrl || "",
+        available: true
+      };
+
       const response = await fetch('http://localhost:8000/menu', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        headers: { 
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify(backendData)
       });
 
-      if (!response.ok) throw new Error('Failed to add drink');
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        throw new Error(errorData.detail || 'Failed to add drink');
+      }
+      
       navigate('/admin');
     } catch (err) {
+      console.error('Error adding drink:', err);
       setError('Failed to add drink. Please try again.');
     } finally {
       setLoading(false);
@@ -186,6 +213,19 @@ function AddDrinkPage() {
                   type="text"
                   name="name"
                   value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                           text-white focus:outline-none focus:border-stone-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Korean Name</label>
+                <input
+                  type="text"
+                  name="koreanName"
+                  value={formData.koreanName}
                   onChange={handleChange}
                   className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
                            text-white focus:outline-none focus:border-stone-500"

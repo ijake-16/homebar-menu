@@ -54,7 +54,16 @@ function HomePage() {
     // This would call your FastAPI backend
     fetch('http://localhost:8000/menu')
       .then(res => res.json())
-      .then(data => setDrinks(data))
+      .then(data => {
+        // Transform the data
+        const transformedData = data.map(drink => ({
+          id: drink.id,
+          name: drink.name,
+          abv: drink.abv,
+          baseLiquor: drink.base // Map base to baseLiquor
+        }));
+        setDrinks(transformedData);
+      })
       .catch(() => {
         // fallback for now
         setDrinks([

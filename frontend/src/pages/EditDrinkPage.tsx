@@ -15,6 +15,7 @@ interface Ingredient {
 
 interface DrinkFormData {
   name: string;
+  koreanName: string;
   abv: number;
   baseLiquor: string;
   glass: string;
@@ -34,6 +35,7 @@ function EditDrinkPage() {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<DrinkFormData>({
     name: '',
+    koreanName: '',
     abv: 0,
     baseLiquor: BASE_LIQUORS[0],
     glass: GLASS_TYPES[0],
@@ -55,20 +57,37 @@ function EditDrinkPage() {
 
   // Fetch existing drink data
   useEffect(() => {
-    const fetchDrink = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/menu/${id}`);
-        if (!response.ok) throw new Error('Failed to fetch drink details');
-        const data = await response.json();
-        setFormData(data);
-      } catch (err) {
-        setError('Failed to load drink details');
-      } finally {
+    if (!id) return;
+    
+    setLoading(true);
+    fetch(`http://localhost:8000/menu/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Drink not found');
+        return res.json();
+      })
+      .then(data => {
+        // Transform backend data to frontend format
+        setFormData({
+          name: data.name || '',
+          koreanName: data.korean_name,
+          abv: data.abv,
+          description: data.description,
+          baseLiquor: data.base,
+          glass: data.glass,
+          ingredients: data.ingredients,
+          ice: data.ice,
+          shakeOrStir: data.shake_or_stir,
+          instructions: data.instructions || [],
+          tags: data.tags || [],
+          imageUrl: data.image_url || ""
+        });
         setLoading(false);
-      }
-    };
-
-    fetchDrink();
+      })
+      .catch(err => {
+        console.error('Error fetching drink:', err);
+        setError('Failed to load drink details.');
+        setLoading(false);
+      });
   }, [id]);
 
   // Reuse the same handlers from AddDrinkPage
@@ -159,15 +178,39 @@ function EditDrinkPage() {
     setError(null);
 
     try {
+      // Transform the data to match the backend model
+      const backendData = {
+        name: formData.name,
+        korean_name: formData.koreanName,
+        abv: formData.abv,
+        description: formData.description,
+        base: formData.baseLiquor,
+        glass: formData.glass,
+        ingredients: formData.ingredients,
+        ice: formData.ice,
+        shake_or_stir: formData.shakeOrStir,
+        instructions: formData.instructions,
+        tags: formData.tags,
+        image_url: formData.imageUrl || "",
+        available: true
+      };
+
       const response = await fetch(`http://localhost:8000/menu/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        headers: { 
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify(backendData)
       });
 
-      if (!response.ok) throw new Error('Failed to update drink');
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Server error:', errorData);
+        throw new Error(errorData.detail || 'Failed to update drink');
+      }
       navigate('/admin');
     } catch (err) {
+      console.error('Error updating drink:', err);
       setError('Failed to update drink. Please try again.');
     } finally {
       setLoading(false);
@@ -184,7 +227,6 @@ function EditDrinkPage() {
     );
   }
 
-  // Use the same JSX structure as AddDrinkPage but with updated title and button text
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-stone-700 to-stone-900 font-mono">
       <div className="container mx-auto px-4 py-8">
@@ -203,10 +245,276 @@ function EditDrinkPage() {
             </div>
           )}
 
-          {/* Reuse the same form structure as AddDrinkPage */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Info Section */}
-            {/* ... Copy the same form sections from AddDrinkPage ... */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold border-b border-stone-600 pb-2">Basic Information</h2>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Korean Name <span className="text-red-400">*</span></label>
+                <input
+                  type="text"
+                  name="koreanName"
+                  value={formData.koreanName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                           text-white focus:outline-none focus:border-stone-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">English Name (Optional)</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                           text-white focus:outline-none focus:border-stone-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Base Liquor</label>
+                  <select
+                    name="baseLiquor"
+                    value={formData.baseLiquor}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                             text-white focus:outline-none focus:border-stone-500"
+                  >
+                    {BASE_LIQUORS.map(liquor => (
+                      <option key={liquor} value={liquor}>{liquor}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Glass Type</label>
+                  <select
+                    name="glass"
+                    value={formData.glass}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                             text-white focus:outline-none focus:border-stone-500"
+                  >
+                    {GLASS_TYPES.map(glass => (
+                      <option key={glass} value={glass}>{glass}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Description Section */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold border-b border-stone-600 pb-2">Description</h2>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={4}
+                className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                         text-white focus:outline-none focus:border-stone-500"
+                required
+              />
+            </div>
+
+            {/* Updated Ingredients Section */}
+            <div className="space-y-6">
+              <div className="flex justify-between items-center border-b border-stone-600 pb-2">
+                <h2 className="text-xl font-semibold">Ingredients</h2>
+              </div>
+
+              {/* Common Ingredients Toggles with Collapsible Categories */}
+              <div className="space-y-4">
+                {Object.entries(COMMON_INGREDIENTS).map(([category, items]) => (
+                  <div key={category} className="border border-stone-600 rounded-lg overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => toggleCategory(category)}
+                      className="w-full px-4 py-3 flex justify-between items-center bg-stone-700/50 hover:bg-stone-700/70 transition-colors duration-150"
+                    >
+                      <h3 className="text-lg font-medium text-stone-300">{category}</h3>
+                      <span className="text-stone-400 transition-transform duration-200" 
+                            style={{ transform: expandedCategories[category] ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        ▼
+                      </span>
+                    </button>
+                    
+                    {expandedCategories[category] && (
+                      <div className="p-4 bg-stone-800/30">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                          {items.map(({ item, defaultAmount }) => (
+                            <div
+                              key={item}
+                              className={`px-3 py-2 rounded-lg text-sm transition-colors duration-150 flex items-center justify-between
+                                ${isIngredientSelected(item)
+                                  ? 'bg-emerald-600/50 hover:bg-emerald-600/40 border-emerald-500'
+                                  : 'bg-stone-700/50 hover:bg-stone-700/70 border-stone-600'
+                                } border`}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => handleIngredientToggle(item, defaultAmount)}
+                                className="flex-1 text-left"
+                              >
+                                {item}
+                              </button>
+                              {isIngredientSelected(item) && (
+                                <span className="text-emerald-400 ml-2">✓</span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Custom Ingredients List */}
+              <div className="mt-6 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium text-stone-300">Current Ingredients</h3>
+                  <button
+                    type="button"
+                    onClick={addIngredient}
+                    className="text-emerald-400 hover:text-emerald-300 text-sm"
+                  >
+                    + Add Custom
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {formData.ingredients.map((ingredient, index) => (
+                    <div key={index} className="flex gap-4 items-center bg-stone-700/30 p-3 rounded-lg">
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          value={ingredient.item}
+                          onChange={(e) => handleIngredientChange(index, 'item', e.target.value)}
+                          placeholder="Ingredient"
+                          className="w-full px-3 py-1.5 rounded-md bg-stone-700 border border-stone-600 
+                                   text-white focus:outline-none focus:border-stone-500"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          value={ingredient.amount}
+                          onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
+                          placeholder="Amount"
+                          className="w-full px-3 py-1.5 rounded-md bg-stone-700 border border-stone-600 
+                                   text-white focus:outline-none focus:border-stone-500"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeIngredient(index)}
+                        className="text-red-400 hover:text-red-300 p-1"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Preparation Section */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold border-b border-stone-600 pb-2">Preparation</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Ice</label>
+                  <select
+                    name="ice"
+                    value={formData.ice}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                             text-white focus:outline-none focus:border-stone-500"
+                  >
+                    {ICE_TYPES.map(ice => (
+                      <option key={ice} value={ice}>{ice}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Method</label>
+                  <select
+                    name="shakeOrStir"
+                    value={formData.shakeOrStir}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                             text-white focus:outline-none focus:border-stone-500"
+                  >
+                    {MIXING_METHODS.map(method => (
+                      <option key={method} value={method}>{method}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Instructions Section */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center border-b border-stone-600 pb-2">
+                <h2 className="text-xl font-semibold">Instructions</h2>
+                <button
+                  type="button"
+                  onClick={addInstruction}
+                  className="text-emerald-400 hover:text-emerald-300 text-sm"
+                >
+                  + Add Step
+                </button>
+              </div>
+              
+              {formData.instructions.map((instruction, index) => (
+                <div key={index} className="flex gap-4 items-start">
+                  <span className="text-stone-400 pt-2">{index + 1}.</span>
+                  <input
+                    type="text"
+                    value={instruction}
+                    onChange={(e) => handleInstructionChange(index, e.target.value)}
+                    placeholder="Instruction step"
+                    className="flex-1 px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                             text-white focus:outline-none focus:border-stone-500"
+                  />
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => removeInstruction(index)}
+                      className="text-red-400 hover:text-red-300 px-2"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Optional Image URL */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold border-b border-stone-600 pb-2">Additional Details</h2>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Image URL (optional)</label>
+                <input
+                  type="url"
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleChange}
+                  placeholder="https://..."
+                  className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                           text-white focus:outline-none focus:border-stone-500"
+                />
+              </div>
+            </div>
             
             {/* Submit Button */}
             <div className="flex justify-end pt-6">
