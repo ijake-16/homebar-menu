@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import detailBg from '../assets/detail_bg.png'; // Import the background image
 
 interface Ingredient {
   item: string;
@@ -82,8 +83,16 @@ function DrinkDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-stone-700 to-stone-900 font-sans">
-      <div className="container mx-auto px-4 py-8">
+    <div 
+      className="min-h-screen w-full bg-stone-900 font-sans"
+      style={{ 
+        backgroundImage: `url(${detailBg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="mx-auto px-4 py-8" style={{ maxWidth: '834px', width: '100%' }}>
         <div className="mb-6 flex items-center">
           <Link to="/" className="text-white hover:text-stone-300">
             &larr; Back to Menu
@@ -97,7 +106,7 @@ function DrinkDetailsPage() {
             {error}
           </div>
         ) : drink ? (
-          <div className="bg-stone-800/50 backdrop-blur-sm rounded-xl shadow-xl p-8 text-white max-w-3xl mx-auto">
+          <div className="bg-stone-800/50 backdrop-blur-sm rounded-xl shadow-xl p-8 text-white w-full">
             <div className="flex justify-between items-start mb-6">
               <div>
                 {drink.name ? (
@@ -114,8 +123,12 @@ function DrinkDetailsPage() {
             {/* Basic Info */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="space-y-2">
-                <p className="text-stone-400 text-sm">Base Liquor</p>
-                <p className="text-lg">{drink.baseLiquor}</p>
+                <p className="text-stone-400 text-sm">Base Spirit</p>
+                <p className="text-lg">
+                  {drink.baseLiquor === 'Liquor' && drink.ingredients.length > 0 
+                    ? drink.ingredients[0].item
+                    : drink.baseLiquor}
+                </p>
               </div>
               <div className="space-y-2">
                 <p className="text-stone-400 text-sm">ABV</p>
@@ -133,22 +146,23 @@ function DrinkDetailsPage() {
               <p className="text-stone-300 font-korean">{drink.description}</p>
             </div>
 
-            {/* Toggle Button */}
-            <button
-              onClick={() => setShowDetails(!showDetails)}
-              className="w-full py-3 px-4 bg-stone-700/50 hover:bg-stone-700/70 
-                       rounded-lg transition-colors duration-150 mb-8 flex items-center justify-between"
-            >
-              <span className="text-stone-300 font-medium">
-                {showDetails ? 'Hide Details' : 'Show Details'}
-              </span>
-              <span 
-                className="transform transition-transform duration-200"
-                style={{ transform: showDetails ? 'rotate(180deg)' : 'rotate(0deg)' }}
+            {/* Toggle Button - Completely transparent with no border */}
+            <div className="flex justify-center mb-6">
+              <button
+                onClick={() => setShowDetails(!showDetails)}
+                className="text-stone-400 hover:text-stone-300 transition-colors duration-150 flex items-center text-xs bg-transparent border-0 outline-none focus:outline-none"
               >
-                ▼
-              </span>
-            </button>
+                <span className="mr-1">
+                  {showDetails ? 'Hide Details' : 'Show Details'}
+                </span>
+                <span 
+                  className="transform transition-transform duration-200"
+                  style={{ transform: showDetails ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                >
+                  ▼
+                </span>
+              </button>
+            </div>
 
             {/* Detailed Information */}
             {showDetails && (
@@ -179,16 +193,6 @@ function DrinkDetailsPage() {
                       <p className="text-lg">{drink.shakeOrStir}</p>
                     </div>
                   </div>
-                </div>
-
-                {/* Instructions */}
-                <div>
-                  <h2 className="text-xl font-semibold mb-3 border-b border-stone-600 pb-2">Instructions</h2>
-                  <ol className="list-decimal list-inside space-y-2">
-                    {drink.instructions.map((instruction, index) => (
-                      <li key={index} className="text-stone-300 pl-2">{instruction}</li>
-                    ))}
-                  </ol>
                 </div>
 
                 {/* Tags */}

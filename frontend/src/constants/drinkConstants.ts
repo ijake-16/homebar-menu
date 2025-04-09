@@ -3,9 +3,9 @@ export interface IngredientOption {
   defaultAmount: string;
 }
 
-export const BASE_LIQUORS = ['Gin', 'Vodka', 'Rum', 'Tequila', 'Whiskey', 'Other'];
+export const BASE_LIQUORS = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Liquor', 'Mixed', 'Non-Alcohol'];
 export const GLASS_TYPES = ['Coupe', 'Highball', 'Martini', 'Old-Fashioned', 'Collins'];
-export const ICE_TYPES = ['None', 'Cubed', 'Crushed', 'Large Cube', 'Large Sphere'];
+export const ICE_TYPES = ['None', 'Chilled', 'Cubed', 'Crushed', 'Large Cube', 'Large Sphere'];
 export const MIXING_METHODS = ['Shake', 'Stir', 'Build'];
 
 export const COMMON_INGREDIENTS: Record<string, IngredientOption[]> = {
@@ -27,14 +27,18 @@ export const COMMON_INGREDIENTS: Record<string, IngredientOption[]> = {
     { item: 'Peach Schnapps', defaultAmount: '1 oz' },
   ],
   Mixers: [
-    { item: 'Lime Juice', defaultAmount: '0.75 oz' },
-    { item: 'Lemon Juice', defaultAmount: '0.75 oz' },
-    { item: 'Simple Syrup', defaultAmount: '0.5 oz' },
+    { item: 'Lime Juice', defaultAmount: '1/2 oz' },
+    { item: 'Lemon Juice', defaultAmount: '1/2 oz' },
+    { item: 'Simple Syrup', defaultAmount: '1/2 oz' },
     { item: 'Tonic Water', defaultAmount: '4 oz' },
     { item: 'Sparkling Water', defaultAmount: '2 oz' },
     { item: 'Club Soda', defaultAmount: '2 oz' },
     { item: 'Cola', defaultAmount: '2 oz' },
     { item: 'Ginger Ale', defaultAmount: '2 oz' },
+    { item: 'Orange Juice', defaultAmount: '2 oz' },
+    { item: 'Apple Juice', defaultAmount: '2 oz' },
+    { item: 'Grapefruit Juice', defaultAmount: '2 oz' },
+    { item: 'Pineapple Juice', defaultAmount: '2 oz' },
   ],
   Garnish: [
     { item: 'Orange Peel', defaultAmount: '1 piece' },

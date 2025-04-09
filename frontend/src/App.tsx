@@ -126,8 +126,38 @@ function HomePage() {
 
   useEffect(() => {
     // Extract unique categories and create refs for each
-    const uniqueCategories = Array.from(new Set(drinks.map(drink => drink.baseLiquor))).sort();
-    setCategories(uniqueCategories);
+    const uniqueCategories = Array.from(new Set(drinks.map(drink => drink.baseLiquor)));
+    
+    // Define the specific order for base spirits
+    const baseOrder = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Liquor', 'Mixed'];
+    
+    // Sort categories according to the specified order
+    // If a category is in the baseOrder array, sort by its index
+    // If not, place it after all specified categories
+    const sortedCategories = uniqueCategories.sort((a, b) => {
+      const indexA = baseOrder.indexOf(a);
+      const indexB = baseOrder.indexOf(b);
+      
+      // If both categories are in baseOrder, sort by their indices
+      if (indexA >= 0 && indexB >= 0) {
+        return indexA - indexB;
+      }
+      
+      // If only a is in baseOrder, it comes first
+      if (indexA >= 0) {
+        return -1;
+      }
+      
+      // If only b is in baseOrder, it comes first
+      if (indexB >= 0) {
+        return 1;
+      }
+      
+      // If neither is in baseOrder, maintain alphabetical ordering
+      return a.localeCompare(b);
+    });
+    
+    setCategories(sortedCategories);
   }, [drinks]);
 
   const setRef = useCallback((element: HTMLDivElement | null, category: string) => {
@@ -212,7 +242,7 @@ function HomePage() {
         {/* Content */}
         <div ref={contentRef} className="relative z-10">
           <h1 className="text-3xl font-bold py-6 text-center text-white">
-            <span className="mr-2">🍸</span> Home Bar Menu
+            <span className="mr-2">🍸</span> The Top of Banpo Bar
           </h1>
           
           <Navigator categories={categories} onCategorySelect={scrollToCategory} />

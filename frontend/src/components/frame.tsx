@@ -29,7 +29,7 @@ const Frame: FunctionComponent<FrameProps> = ({ drinks }) => {
                     >
                       <div className="text-xl">{drink.name}</div>
                     </Link>
-                    <div className="text-sm text-stone-400 font-korean ml-4">
+                    <div className="text-sm text-stone-400 font-korean ml-12">
                       {drink.koreanName}
                     </div>
                   </>
@@ -42,7 +42,7 @@ const Frame: FunctionComponent<FrameProps> = ({ drinks }) => {
                   </Link>
                 )}
               </div>
-              <span className="text-2xl text-gray-300 ml-12 font-normal mt-1">ABV: {drink.abv + "%"}</span>
+              <span className="text-2xl text-gray-300 ml-16 font-normal mt-2">ABV: {drink.abv + "%"}</span>
             </div>
           </div>
         ))}
