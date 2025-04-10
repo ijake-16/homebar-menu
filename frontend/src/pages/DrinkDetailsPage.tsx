@@ -94,7 +94,7 @@ function DrinkDetailsPage() {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      <div className="mx-auto px-4 py-8" style={{ maxWidth: '834px', width: '100%' }}>
+      <div className="max-w-7xl mx-auto px-4 py-8 lg:min-w-[1024px]">
         <div className="mb-6 flex items-center">
           <Link to="/" className="text-white hover:text-stone-300">
             &larr; Back to Menu
