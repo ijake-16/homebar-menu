@@ -25,6 +25,12 @@ app.add_middleware(
 async def root():
     return {"message": "Welcome to the Homebar API. Go to /docs for documentation."}
 
+# Add a redirect handler for /menu endpoint (without trailing slash)
+@app.get("/menu")
+async def menu_redirect():
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/menu/")
+
 # Add a debug endpoint
 @app.get("/debug")
 async def debug():

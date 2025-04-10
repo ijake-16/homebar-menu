@@ -22,6 +22,7 @@ function HomePage() {
   const [scrollY, setScrollY] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
   const [usingFallbackData, setUsingFallbackData] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const sectionRefs = useRef<{[key: string]: HTMLDivElement | null}>({});
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -57,8 +58,12 @@ function HomePage() {
     const apiUrl = import.meta.env.VITE_API_URL || '';
     console.log('API URL:', apiUrl);  // Debug log
 
+    // Ensure the API URL has the proper format with trailing slash
+    const menuEndpoint = `${apiUrl}/menu/`;
+    console.log('Menu endpoint:', menuEndpoint);  // Debug log
+
     // First make an OPTIONS request to check CORS and connectivity
-    fetch(`${apiUrl}/menu`, { method: 'OPTIONS' })
+    fetch(menuEndpoint, { method: 'OPTIONS' })
       .then(res => {
         console.log('OPTIONS response status:', res.status, res.statusText);
         console.log('OPTIONS response headers:', Object.fromEntries([...res.headers.entries()]));
@@ -68,7 +73,7 @@ function HomePage() {
       });
 
     // Then make the actual GET request
-    fetch(`${apiUrl}/menu`)
+    fetch(menuEndpoint)
       .then(res => {
         console.log('GET response status:', res.status, res.statusText);
         console.log('GET response headers:', Object.fromEntries([...res.headers.entries()]));
@@ -92,6 +97,7 @@ function HomePage() {
       .catch((error) => {
         console.error("Error fetching menu:", error);
         setUsingFallbackData(true);
+        setConnectionError(error.message || "Could not connect to database");
         // fallback for now
         setDrinks([
           { id: '1', name: 'Margarita', koreanName: '마가리타', abv: '13%', baseLiquor: 'Tequila' },
@@ -273,6 +279,7 @@ function HomePage() {
           {usingFallbackData && (
             <div className="bg-yellow-800/70 text-white p-3 mb-6 rounded-md mx-4 text-center">
               <p>Using demo data. Database connection unavailable.</p>
+              {connectionError && <p className="text-sm mt-1 text-yellow-300">{connectionError}</p>}
             </div>
           )}
           
