@@ -21,6 +21,7 @@ function HomePage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [scrollY, setScrollY] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
+  const [usingFallbackData, setUsingFallbackData] = useState(false);
   const sectionRefs = useRef<{[key: string]: HTMLDivElement | null}>({});
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -54,9 +55,30 @@ function HomePage() {
   useEffect(() => {
     // Use the environment variable for API URL
     const apiUrl = import.meta.env.VITE_API_URL || '';
+    console.log('API URL:', apiUrl);  // Debug log
+
+    // First make an OPTIONS request to check CORS and connectivity
+    fetch(`${apiUrl}/menu`, { method: 'OPTIONS' })
+      .then(res => {
+        console.log('OPTIONS response status:', res.status, res.statusText);
+        console.log('OPTIONS response headers:', Object.fromEntries([...res.headers.entries()]));
+      })
+      .catch(error => {
+        console.error('OPTIONS request error:', error);
+      });
+
+    // Then make the actual GET request
     fetch(`${apiUrl}/menu`)
-      .then(res => res.json())
+      .then(res => {
+        console.log('GET response status:', res.status, res.statusText);
+        console.log('GET response headers:', Object.fromEntries([...res.headers.entries()]));
+        if (!res.ok) {
+          throw new Error(`Server responded with ${res.status}: ${res.statusText}`);
+        }
+        return res.json();
+      })
       .then(data => {
+        console.log('Data received:', data);
         // Transform the data
         const transformedData = data.map((drink: any) => ({
           id: drink.id,
@@ -69,6 +91,7 @@ function HomePage() {
       })
       .catch((error) => {
         console.error("Error fetching menu:", error);
+        setUsingFallbackData(true);
         // fallback for now
         setDrinks([
           { id: '1', name: 'Margarita', koreanName: '마가리타', abv: '13%', baseLiquor: 'Tequila' },
@@ -246,6 +269,12 @@ function HomePage() {
           <h1 className="text-3xl font-bold py-6 text-center text-white">
             <span className="mr-2">🍸</span> The Top of Banpo Bar
           </h1>
+          
+          {usingFallbackData && (
+            <div className="bg-yellow-800/70 text-white p-3 mb-6 rounded-md mx-4 text-center">
+              <p>Using demo data. Database connection unavailable.</p>
+            </div>
+          )}
           
           <Navigator categories={categories} onCategorySelect={scrollToCategory} />
           
