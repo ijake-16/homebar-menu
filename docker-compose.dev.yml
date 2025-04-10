@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=${MONGODB_URI:-mongodb+srv://your-atlas-connection-string}
+      - FRONTEND_URLS=http://localhost:5173,http://localhost:8016
+    volumes:
+      - ./backend:/app
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  frontend-dev:
+    image: node:20-slim
+    working_dir: /app
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8016/api}
+      - FORCE_COLOR=1
+    volumes:
+      - ./frontend:/app
+      - ./frontend/.env:/app/.env
+    command: ["bash", "./start-dev.sh"]
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+
+  nginx:
+    image: nginx:1.23-alpine
+    restart: always
+    depends_on:
+      - frontend-dev
+      - backend
+    ports:
+      - 8016:80
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf 

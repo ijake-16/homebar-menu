@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - DB_NAME=${DB_NAME:-banpo}
+      - FRONTEND_URLS=https://bar.buttercrab.net
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=Host(`bar.buttercrab.net`) && (PathPrefix(`/api`) || PathPrefix(`/api/`))
+      - traefik.http.routers.backend.entrypoints=web,websecured
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.tls.certresolver=le
+      - traefik.http.services.backend.loadbalancer.server.port=8000
+      - traefik.http.middlewares.backend-strip.stripprefix.prefixes=/api
+      - traefik.http.routers.backend.middlewares=backend-strip
+    networks:
+      - traefik-proxy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - SKIP_TS_CHECK=true
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=https://bar.buttercrab.net/api
+    depends_on:
+      - backend
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`bar.buttercrab.net`)
+      - traefik.http.routers.frontend.entrypoints=web,websecured
+      - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.tls.certresolver=le
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+    networks:
+      - traefik-proxy
+
+networks:
+  traefik-proxy:
+    external: true 
