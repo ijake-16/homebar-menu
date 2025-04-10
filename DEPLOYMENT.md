@@ -128,6 +128,14 @@ Since we're using MongoDB Atlas, database management is done through the MongoDB
 
 - **TLS certificate issues**: Ensure Traefik is properly configured to request certificates from Let's Encrypt.
 
+- **TypeScript build errors**: 
+  - The Dockerfile is configured to skip TypeScript type checking during build to allow deployment even with TypeScript errors.
+  - For a proper fix, you should address the TypeScript errors in the codebase:
+    1. Fix unused imports (React, Link)
+    2. Add proper types to parameters
+    3. Remove unused variables
+  - You can temporarily deploy despite these errors, but they should be fixed in the source code for better maintainability.
+
 - **Checking container status**:
   ```bash
   docker-compose ps
