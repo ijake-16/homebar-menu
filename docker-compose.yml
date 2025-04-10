@@ -30,7 +30,7 @@ services:
         - SKIP_TS_CHECK=true
     restart: unless-stopped
     environment:
-      - VITE_API_URL=/api
+      - VITE_API_URL=https://bar.buttercrab.net/api
     depends_on:
       - backend
     labels:
