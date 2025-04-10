@@ -136,7 +136,11 @@ function DrinkDetailsPage() {
                 </div>
                 <div className="flex-1 px-2 flex flex-col">
                   <p className="text-stone-400 text-sm">ABV</p>
-                  <span className="text-lg nowrap" style={{ whiteSpace: 'nowrap' }}>{drink.abv}%</span>
+                  <p className="text-lg flex-shrink-0 w-full" style={{ fontSize: '1.125rem' }}>
+                    <span style={{ display: 'inline-block', width: '100%', whiteSpace: 'nowrap' }}>
+                      {drink.abv}%
+                    </span>
+                  </p>
                 </div>
                 <div className="flex-1 pl-4">
                   <p className="text-stone-400 text-sm">Glass</p>

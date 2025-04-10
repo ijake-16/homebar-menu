@@ -15,12 +15,12 @@ interface FrameProps {
 
 const Frame: FunctionComponent<FrameProps> = ({ drinks }) => {
   return (
-    <div className="w-full px-8 md:px-16 lg:px-32">
-      <div className="grid grid-cols-2 gap-x-36 gap-y-2">
+    <div className="w-full px-8 md:px-16 lg:px-28">
+      <div className="grid grid-cols-2 gap-x-20 sm:gap-x-32 md:gap-x-40 gap-y-2">
         {drinks.map(drink => (
           <div key={drink.id} className="text-white p-2">
-            <div className="flex justify-between items-start">
-              <div className="flex flex-col max-w-[70%]">
+            <div className="flex justify-between items-start space-x-8 sm:space-x-12 md:space-x-16">
+              <div className="flex flex-col max-w-[55%] sm:max-w-[60%] md:max-w-[65%]">
                 {drink.name ? (
                   <>
                     <Link 
@@ -43,7 +43,7 @@ const Frame: FunctionComponent<FrameProps> = ({ drinks }) => {
                 )}
               </div>
               <div className="flex-shrink-0 text-right">
-                <span className="text-2xl text-gray-300 font-normal whitespace-nowrap">ABV: {drink.abv}%</span>
+                <span className="text-xl sm:text-2xl text-gray-300 font-normal whitespace-nowrap">ABV: {drink.abv}%</span>
               </div>
             </div>
           </div>
