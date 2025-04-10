@@ -114,10 +114,10 @@ function DrinkDetailsPage() {
                 {drink.name ? (
                   <>
                     <h1 className="text-3xl font-bold">{drink.name}</h1>
-                    <h2 className="text-xl font-medium text-stone-400 mt-1 font-korean">{drink.koreanName}</h2>
+                    <h2 className="text-xl font-medium text-stone-400 mt-1 font-korean whitespace-nowrap">{drink.koreanName}</h2>
                   </>
                 ) : (
-                  <h1 className="text-3xl font-bold font-korean">{drink.koreanName}</h1>
+                  <h1 className="text-3xl font-bold font-korean whitespace-nowrap">{drink.koreanName}</h1>
                 )}
               </div>
             </div>
@@ -134,7 +134,7 @@ function DrinkDetailsPage() {
               </div>
               <div className="space-y-2">
                 <p className="text-stone-400 text-sm">ABV</p>
-                <p className="text-lg">{drink.abv}%</p>
+                <p className="text-lg whitespace-nowrap">{drink.abv}%</p>
               </div>
               <div className="space-y-2">
                 <p className="text-stone-400 text-sm">Glass</p>
