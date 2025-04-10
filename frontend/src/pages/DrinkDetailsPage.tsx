@@ -109,36 +109,39 @@ function DrinkDetailsPage() {
           </div>
         ) : drink ? (
           <div className="bg-stone-800/50 backdrop-blur-sm rounded-xl shadow-xl p-8 text-white w-full">
-            <div className="flex justify-between items-start mb-6">
-              <div>
+            {/* Header with name info - complete restructure */}
+            <div className="mb-6">
+              <div className="flex flex-col w-full">
                 {drink.name ? (
                   <>
-                    <h1 className="text-3xl font-bold">{drink.name}</h1>
-                    <h2 className="text-xl font-medium text-stone-400 mt-1 font-korean whitespace-nowrap">{drink.koreanName}</h2>
+                    <h1 className="text-3xl font-bold flex-shrink-0">{drink.name}</h1>
+                    <h2 className="text-xl font-medium text-stone-400 mt-1 font-korean flex-shrink-0">{drink.koreanName}</h2>
                   </>
                 ) : (
-                  <h1 className="text-3xl font-bold font-korean whitespace-nowrap">{drink.koreanName}</h1>
+                  <h1 className="text-3xl font-bold font-korean flex-shrink-0">{drink.koreanName}</h1>
                 )}
               </div>
             </div>
 
-            {/* Basic Info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="space-y-2">
-                <p className="text-stone-400 text-sm">Base Spirit</p>
-                <p className="text-lg">
-                  {drink.baseLiquor === 'Liquor' && drink.ingredients.length > 0 
-                    ? drink.ingredients[0].item
-                    : drink.baseLiquor}
-                </p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-stone-400 text-sm">ABV</p>
-                <p className="text-lg whitespace-nowrap">{drink.abv}%</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-stone-400 text-sm">Glass</p>
-                <p className="text-lg">{drink.glass}</p>
+            {/* Basic Info - using flexible grid */}
+            <div className="mb-8">
+              <div className="flex flex-row w-full">
+                <div className="flex-1 pr-4">
+                  <p className="text-stone-400 text-sm">Base Spirit</p>
+                  <p className="text-lg flex-shrink-0">
+                    {drink.baseLiquor === 'Liquor' && drink.ingredients.length > 0 
+                      ? drink.ingredients[0].item
+                      : drink.baseLiquor}
+                  </p>
+                </div>
+                <div className="flex-1 px-2 flex flex-col">
+                  <p className="text-stone-400 text-sm">ABV</p>
+                  <span className="text-lg nowrap" style={{ whiteSpace: 'nowrap' }}>{drink.abv}%</span>
+                </div>
+                <div className="flex-1 pl-4">
+                  <p className="text-stone-400 text-sm">Glass</p>
+                  <p className="text-lg flex-shrink-0">{drink.glass}</p>
+                </div>
               </div>
             </div>
 
