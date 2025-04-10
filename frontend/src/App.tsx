@@ -67,7 +67,8 @@ function HomePage() {
         }));
         setDrinks(transformedData);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Error fetching menu:", error);
         // fallback for now
         setDrinks([
           { id: '1', name: 'Margarita', koreanName: '마가리타', abv: '13%', baseLiquor: 'Tequila' },
