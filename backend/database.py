@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import sys
 import traceback
+import asyncio
 
 load_dotenv()
 
@@ -26,13 +27,15 @@ try:
     
     print("Attempting MongoDB connection...")
     client = AsyncIOMotorClient(MONGODB_URI)
-    # Force a connection to verify it works
-    server_info = client.server_info()
-    print(f"Connected to MongoDB version: {server_info.get('version', 'unknown')}")
+    
+    # Don't try to get server_info here since it's async
+    # Instead just directly connect to the DB and collection
+    # The connection will be verified when we actually use it
     
     db = client[DB_NAME]
     menu_collection = db["menu"]
-    print(f"Successfully connected to MongoDB: database={DB_NAME}, collection=menu")
+    print(f"MongoDB client initialized: database={DB_NAME}, collection=menu")
+    print("Note: Actual connection will be verified on first request")
     
 except Exception as e:
     print(f"DATABASE ERROR: {type(e).__name__}: {e}")

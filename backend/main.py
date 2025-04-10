@@ -42,13 +42,22 @@ async def debug():
     db_status = "Unknown"
     try:
         if menu_collection is not None:
+            # Try to actually connect and perform a simple operation
             count = await menu_collection.count_documents({})
             debug_info["drink_count"] = count
+            
+            # Try to get server info for version info
+            server_info = await menu_collection.database.client.admin.command("serverStatus")
+            debug_info["mongodb_version"] = server_info.get("version", "unknown")
+            debug_info["mongodb_uptime_hours"] = round(server_info.get("uptime", 0) / 3600, 2)
+            
             db_status = "Connected"
         else:
             db_status = "Collection not initialized"
     except Exception as e:
         db_status = f"Error: {str(e)}"
+        debug_info["error_type"] = type(e).__name__
+        debug_info["error_details"] = str(e)
     
     debug_info["db_status"] = db_status
         
