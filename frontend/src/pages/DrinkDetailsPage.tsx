@@ -35,7 +35,8 @@ function DrinkDetailsPage() {
     if (!id) return;
     
     setLoading(true);
-    fetch(`http://localhost:8000/menu/${id}`)
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiUrl}/menu/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Drink not found');
         return res.json();
@@ -70,7 +71,8 @@ function DrinkDetailsPage() {
     if (!id || !window.confirm('Are you sure you want to delete this drink?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/menu/${id}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/menu/${id}`, {
         method: 'DELETE',
       });
       
