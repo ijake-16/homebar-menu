@@ -12,7 +12,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=Host(`bar.buttercrab.net`) && PathPrefix(`/api`)
-      - traefik.http.routers.backend.entrypoints=web,websecure
+      - traefik.http.routers.backend.entrypoints=web,websecured
       - traefik.http.routers.backend.tls=true
       - traefik.http.routers.backend.tls.certresolver=le
       - traefik.http.services.backend.loadbalancer.server.port=8000
@@ -35,7 +35,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.frontend.rule=Host(`bar.buttercrab.net`)
-      - traefik.http.routers.frontend.entrypoints=web,websecure
+      - traefik.http.routers.frontend.entrypoints=web,websecured
       - traefik.http.routers.frontend.tls=true
       - traefik.http.routers.frontend.tls.certresolver=le
       - traefik.http.services.frontend.loadbalancer.server.port=80
