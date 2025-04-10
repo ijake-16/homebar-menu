@@ -18,7 +18,8 @@ function AdminPage() {
   useEffect(() => {
     // Fetch drinks from the backend
     setLoading(true);
-    fetch('http://localhost:8000/menu')
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiUrl}/menu`)
       .then(res => res.json())
       .then(data => {
         // Transform the data
@@ -54,7 +55,8 @@ function AdminPage() {
     if (!window.confirm('Are you sure you want to delete this drink?')) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/menu/${drinkId}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/menu/${drinkId}`, {
         method: 'DELETE',
       });
 
