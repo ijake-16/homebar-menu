@@ -52,8 +52,9 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    // This would call your FastAPI backend
-    fetch('http://localhost:8000/menu')
+    // Use the environment variable for API URL
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    fetch(`${apiUrl}/menu`)
       .then(res => res.json())
       .then(data => {
         // Transform the data
