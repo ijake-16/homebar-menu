@@ -14,10 +14,11 @@ print(f"Allowed CORS origins: {frontend_urls}")
 # Allow frontend connection
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Temporarily allow all origins for debugging
+    allow_origins=frontend_urls,  # Use the actual frontend URLs
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Explicitly list allowed methods
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # Add a root endpoint
