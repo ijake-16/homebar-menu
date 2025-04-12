@@ -3,7 +3,7 @@ export interface IngredientOption {
   defaultAmount: string;
 }
 
-export const BASE_LIQUORS = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Liquor', 'Mixed', 'Non-Alcohol'];
+export const BASE_LIQUORS = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Brandy', 'Liquor', 'Mixed', 'Non-Alcohol'];
 export const GLASS_TYPES = ['Coupe', 'Highball', 'Martini', 'Old-Fashioned', 'Collins'];
 export const ICE_TYPES = ['None', 'Chilled', 'Cubed', 'Crushed', 'Large Cube', 'Large Sphere'];
 export const MIXING_METHODS = ['Shake', 'Stir', 'Build'];

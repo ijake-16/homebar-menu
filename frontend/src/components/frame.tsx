@@ -29,7 +29,7 @@ const Frame: FunctionComponent<FrameProps> = ({ drinks }) => {
                     >
                       <div className="text-xl truncate">{drink.name}</div>
                     </Link>
-                    <div className="text-sm text-stone-400 font-korean ml-12 truncate">
+                    <div className="text-xs text-stone-400 font-korean ml-4 truncate">
                       {drink.koreanName}
                     </div>
                   </>
@@ -38,7 +38,7 @@ const Frame: FunctionComponent<FrameProps> = ({ drinks }) => {
                     to={`/drinks/${drink.id}`} 
                     className="text-white hover:text-stone-300 transition-colors block w-full"
                   >
-                    <div className="text-base font-korean truncate">{drink.koreanName}</div>
+                    <div className="text-xl font-korean truncate ml-2">{drink.koreanName}</div>
                   </Link>
                 )}
               </div>

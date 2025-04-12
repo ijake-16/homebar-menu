@@ -160,7 +160,7 @@ function HomePage() {
     const uniqueCategories = Array.from(new Set(drinks.map(drink => drink.baseLiquor)));
     
     // Define the specific order for base spirits
-    const baseOrder = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Liquor', 'Mixed'];
+    const baseOrder = ['Gin', 'Rum', 'Vodka', 'Whiskey', 'Tequila', 'Brandy', 'Liquor', 'Mixed'];
     
     // Sort categories according to the specified order
     // If a category is in the baseOrder array, sort by its index

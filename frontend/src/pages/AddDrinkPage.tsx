@@ -162,7 +162,7 @@ function AddDrinkPage() {
       };
 
       const apiUrl = import.meta.env.VITE_API_URL || '';
-      const response = await fetch(`${apiUrl}/menu`, {
+      const response = await fetch(`${apiUrl}/menu/`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json; charset=utf-8'
@@ -209,7 +209,7 @@ function AddDrinkPage() {
               <h2 className="text-xl font-semibold border-b border-stone-600 pb-2">Basic Information</h2>
               
               <div>
-                <label className="block text-sm font-medium mb-2">Name</label>
+                <label className="block text-sm font-medium mb-2">Name (Optional)</label>
                 <input
                   type="text"
                   name="name"
@@ -217,7 +217,6 @@ function AddDrinkPage() {
                   onChange={handleChange}
                   className="w-full px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
                            text-white focus:outline-none focus:border-stone-500"
-                  required
                 />
               </div>
 
