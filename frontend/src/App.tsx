@@ -285,14 +285,14 @@ function HomePage() {
           
           <Navigator categories={categories} onCategorySelect={scrollToCategory} />
           
-          <div className="mt-8">
+          <div className="mt-6">
             {categories.map(category => (
               <div 
                 key={category} 
                 ref={(el) => setRef(el, category)} 
                 className="mb-12"
               >
-                <h3 className="text-xl font-korean text-white px-8 md:px-16 lg:px-32 mb-4">
+                <h3 className="text-2xl font-korean text-white px-8 md:px-16 lg:px-32 mb-4">
                   {category}
                 </h3>
                 <Frame drinks={drinks.filter(drink => drink.baseLiquor === category)} />
