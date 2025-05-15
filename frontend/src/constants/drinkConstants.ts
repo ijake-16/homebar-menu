@@ -30,6 +30,8 @@ export const COMMON_INGREDIENTS: Record<string, IngredientOption[]> = {
     { item: 'Lime Juice', defaultAmount: '1/2 oz' },
     { item: 'Lemon Juice', defaultAmount: '1/2 oz' },
     { item: 'Simple Syrup', defaultAmount: '1/2 oz' },
+    { item: 'Grenadine Syrup', defaultAmount: '1/2 oz'},
+    { item: 'Sweet and Sour Mix', defaultAmount: '1 oz'},
     { item: 'Tonic Water', defaultAmount: '4 oz' },
     { item: 'Sparkling Water', defaultAmount: '2 oz' },
     { item: 'Club Soda', defaultAmount: '2 oz' },
