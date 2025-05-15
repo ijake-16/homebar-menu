@@ -277,6 +277,21 @@ function EditDrinkPage() {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium mb-2">ABV (%)</label>
+                <input
+                  type="number"
+                  name="abv"
+                  value={formData.abv}
+                  onChange={handleChange}
+                  min="0"
+                  max="100"
+                  className="w-32 px-4 py-2 rounded-lg bg-stone-700 border border-stone-600 
+                           text-white focus:outline-none focus:border-stone-500"
+                  required
+                />
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">Base Spirit</label>

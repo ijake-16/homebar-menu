@@ -13,7 +13,7 @@ const Navigator: React.FC<NavigatorProps> = ({ categories, onCategorySelect }) =
           <button
             key={category}
             onClick={() => onCategorySelect(category)}
-            className="text-white hover:text-stone-300 focus:outline-none px-4 py-2 
+            className="text-white hover:text-stone-300 focus:outline-none px-2 py-2 
                      bg-transparent hover:border-stone-500 rounded-xl
                      transition-all duration-300 ease-in-out transform hover:scale-105
                      font-quintessential"
